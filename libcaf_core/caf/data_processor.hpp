@@ -242,7 +242,7 @@ public:
         size_t cpt = 0;
         for (auto v: rhs) {
           for (int k = 0; k < 64; ++k) {
-            lhs[cpt++] = ((v & (1ul << k)) != 0);
+            lhs[cpt++] = ((v & (1ull << k)) != 0);
           }
         }
       }
@@ -254,7 +254,7 @@ public:
         for (size_t k = 0; k < len; ++k) {
           auto b = rhs[k];
           if (b)
-            lhs[k / 64] |= (1ul << (k % 64));
+            lhs[k / 64] |= (1ull << (k % 64));
         }
       }
     } assign;
@@ -269,17 +269,17 @@ public:
       for (int k = 0; k < remainder; ++k) {
         auto b = x[len - remainder + k];
         if (b)
-          encoded |= (1ul << k);
+          encoded |= (1ull << k);
       }
-      return begin_sequence(encoded);
+      return apply_builtin(u64_v, &encoded, true);
     } else {
       uint64_t encoded = 0;
-      err = begin_sequence(encoded);
+      err = apply_builtin(u64_v, &encoded, true);
       if (err)
         return err;
       x.reserve(x.size() + remainder);
       for (int k = 0; k < remainder; ++k) {
-        x.push_back((bool) (encoded & (1ul << k)));
+        x.push_back((bool) (encoded & (1ull << k)));
       }
       return none;
     }
@@ -574,7 +574,7 @@ public:
 
 protected:
   /// Applies this processor to a single builtin value.
-  virtual error apply_builtin(builtin in_out_type, void* in_out) = 0;
+  virtual error apply_builtin(builtin in_out_type, void* in_out, bool varbyte = false) = 0;
 
 private:
   template <class T>

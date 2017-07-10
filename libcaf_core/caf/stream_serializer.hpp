@@ -121,7 +121,7 @@ protected:
     return none;
   }
 
-  error apply_builtin(builtin type, void* val) override {
+  error apply_builtin(builtin type, void* val, bool varbyte) override {
     CAF_ASSERT(val != nullptr);
     switch (type) {
       default: // i8_v or u8_v
@@ -129,13 +129,16 @@ protected:
         return apply_raw(sizeof(uint8_t), val);
       case i16_v:
       case u16_v:
-        return apply_int(*reinterpret_cast<uint16_t*>(val));
+        return varbyte ? varbyte_encode(*reinterpret_cast<uint16_t*>(val))
+                       : apply_int(*reinterpret_cast<uint16_t*>(val));
       case i32_v:
       case u32_v:
-        return apply_int(*reinterpret_cast<uint32_t*>(val));
+        return varbyte ? varbyte_encode(*reinterpret_cast<uint32_t*>(val))
+                       : apply_int(*reinterpret_cast<uint32_t*>(val));
       case i64_v:
       case u64_v:
-        return apply_int(*reinterpret_cast<uint64_t*>(val));
+        return varbyte ? varbyte_encode(*reinterpret_cast<uint64_t*>(val))
+                       : apply_int(*reinterpret_cast<uint64_t*>(val));
       case float_v:
         return apply_int(detail::pack754(*reinterpret_cast<float*>(val)));
       case double_v:
