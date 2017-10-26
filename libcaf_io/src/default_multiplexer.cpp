@@ -1456,6 +1456,11 @@ std::vector<char>& scribe_impl::rd_buf() {
   return stream_.rd_buf();
 }
 
+std::array<size_t, 4> scribe_impl::mem_usage() const {
+ return stream_.mem_usage();
+}
+
+
 void scribe_impl::stop_reading() {
   CAF_LOG_TRACE("");
   stream_.stop_reading();

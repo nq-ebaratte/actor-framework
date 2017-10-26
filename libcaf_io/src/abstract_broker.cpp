@@ -96,6 +96,16 @@ std::vector<char>& abstract_broker::wr_buf(connection_handle hdl) {
   return x->wr_buf();
 }
 
+std::array<size_t, 4> abstract_broker::mem_usage(connection_handle hdl) {
+  auto x = by_id(hdl);
+  if (!x) {
+    CAF_LOG_ERROR("tried to access wr_buf() of an unknown connection_handle");
+    return {0, 0, 0, 0};
+  }
+  return x->mem_usage();
+};
+
+
 void abstract_broker::write(connection_handle hdl, size_t bs, const void* buf) {
   auto& out = wr_buf(hdl);
   auto first = reinterpret_cast<const char*>(buf);

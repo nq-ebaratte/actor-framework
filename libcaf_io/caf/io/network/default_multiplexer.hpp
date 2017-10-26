@@ -497,6 +497,10 @@ public:
     return rd_buf_;
   }
 
+  inline std::array<size_t, 4> mem_usage() const {
+    return {wr_buf_.size(), wr_buf_.capacity(), wr_offline_buf_.size(), wr_offline_buf_.capacity()};
+  }
+
   /// Sends the content of the write buffer, calling the `io_failure`
   /// member function of `mgr` in case of an error.
   /// @warning Must not be called outside the IO multiplexers event loop
@@ -743,6 +747,8 @@ public:
   std::vector<char>& wr_buf() override;
 
   std::vector<char>& rd_buf() override;
+
+  std::array<size_t, 4> mem_usage() const override;
 
   void stop_reading() override;
 

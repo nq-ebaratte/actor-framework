@@ -52,6 +52,9 @@ public:
   /// Returns the current output buffer.
   virtual std::vector<char>& wr_buf() = 0;
 
+  /// Returns the size and capacity of the internal write buffers
+  virtual std::array<size_t, 4> mem_usage() const { return {0, 0, 0, 0}; };
+
   /// Returns the current input buffer.
   virtual std::vector<char>& rd_buf() = 0;
 

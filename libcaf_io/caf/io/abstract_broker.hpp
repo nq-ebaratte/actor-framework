@@ -147,6 +147,8 @@ public:
   /// Returns the write buffer for given connection.
   std::vector<char>& wr_buf(connection_handle hdl);
 
+  std::array<size_t, 4> mem_usage(connection_handle hdl);
+
   /// Writes `data` into the buffer for given connection.
   void write(connection_handle hdl, size_t bs, const void* buf);
 
