@@ -576,6 +576,14 @@ protected:
             if (ack_writes_)
               writer_->data_transferred(&backend(), wb,
                                         remaining + wr_offline_buf_.size());
+
+            if (wr_offline_buf_.size() + wr_buf_.size() > 10 * 1024 * 1024) {
+              time_t now = time(NULL);
+              char buffer[128];
+              strftime(buffer, 128, "%F %T", gmtime(&now));
+              std::cout << buffer << " " << this << " sent " << wb << " bytes, in buffer: "
+                        << wr_offline_buf_.size() << " + " << wr_buf_.size() - written_ << std::endl;
+            }
             // prepare next send (or stop sending)
             if (remaining == 0)
               prepare_next_write();
